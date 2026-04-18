@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { api } from '../api/client.js';
 import Modal from '../components/Modal.jsx';
 import ScoreDisplay from '../components/ScoreDisplay.jsx';
+import * as XLSX from 'xlsx';
 
 const BASINS = [
   'Permian Basin','Eagle Ford','Haynesville','Bakken','Marcellus','Utica',
