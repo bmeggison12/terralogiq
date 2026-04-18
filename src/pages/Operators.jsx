@@ -1,3 +1,4 @@
+import * as XLSX from 'xlsx';
 import React, { useState, useEffect, useRef } from 'react';
 import { api } from '../api/client.js';
 import Modal from '../components/Modal.jsx';
@@ -360,6 +361,25 @@ export default function Operators() {
   const [activeTab, setActiveTab] = useState('list');
   const [competitorOp, setCompetitorOp] = useState(null);
 
+  // 🔥 EXCEL UPLOAD HANDLER (SAFE)
+const handleFileUpload = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = (evt) => {
+    const data = new Uint8Array(evt.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const json = XLSX.utils.sheet_to_json(sheet);
+
+    console.log("EXCEL DATA:", json);
+  };
+
+  reader.readAsArrayBuffer(file);
+};
   const load = async () => {
     setLoading(true);
     try {
@@ -492,6 +512,12 @@ export default function Operators() {
               </button>
             )}
             <span style={{ fontSize: 12, color: 'var(--text-muted)', marginLeft: 'auto' }}>{filtered.length} operators</span>
+            <input
+  type="file"
+  accept=".xlsx,.csv"
+  onChange={handleFileUpload}
+  style={{ fontSize: 12 }}
+/>
           </div>
 
           <div className="card">
